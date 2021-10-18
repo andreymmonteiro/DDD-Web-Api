@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting", "API.CrossCu
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "API.Data\Data.csproj", "{4617C372-A280-453E-B4DB-A0BA3A48E29E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "API.Service\Service.csproj", "{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{4617C372-A280-453E-B4DB-A0BA3A48E29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4617C372-A280-453E-B4DB-A0BA3A48E29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4617C372-A280-453E-B4DB-A0BA3A48E29E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
