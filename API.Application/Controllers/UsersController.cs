@@ -63,7 +63,9 @@ namespace application.Controllers
                 return BadRequest(ModelState);
             try
             {
-                var restult = await services.Post(user);
+                var result = await services.Post(user);
+                if (result != null)
+                    return Ok();
             }
             catch (ArgumentException error)
             {
