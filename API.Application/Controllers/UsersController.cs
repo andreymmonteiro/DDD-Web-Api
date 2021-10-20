@@ -82,7 +82,7 @@ namespace application.Controllers
             {
                 var result = await services.Put(user);
                 if (result != null)
-                    return Ok();
+                    return Ok(result);
             }
             catch (ArgumentException error)
             {
@@ -90,6 +90,24 @@ namespace application.Controllers
             }
             return Ok();
 
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> Delete(Guid id)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                if (await services.Delete(id))
+                    return Ok(id);
+                return BadRequest(ModelState);
+
+            }
+            catch(ArgumentException error)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, error.Message);
+            }
         }
     }
 }

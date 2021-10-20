@@ -1,6 +1,8 @@
 ﻿using Data.Context;
+using Data.Implementations;
 using Data.Repositories;
 using Domain.Interfaces;
+using Domain.Repository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -20,6 +22,7 @@ namespace CrossCutting.DependencyInjetction
             serviceCollection.AddDbContext<MyContext>(
                 options => options.UseMySql(stringConnection, ServerVersion.Parse("5.7-mysql"))
                 );
+            serviceCollection.AddScoped<IUserRepository, UserImplementation>();
         }
     }
 }

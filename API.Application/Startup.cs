@@ -1,5 +1,4 @@
 using CrossCutting.DependencyInjetction;
-using Data.Context;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

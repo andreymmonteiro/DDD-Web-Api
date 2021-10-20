@@ -1,0 +1,10 @@
+Domain é basicamente onde fica as interfaces 
+Services é onde fica os serviços que vão usar os repositories
+Data é onde tem a implementação da manipulação de dados (get, put, post, delete, etc)
+
+
+Services faz o tratamento e as possíveis regras de negócios para usar do repository para concluir a ação
+
+Os repositories são basicamente interfaces que são implementadas no Data.
+
+Cross Cutting é onde é feito as injeções de dependências

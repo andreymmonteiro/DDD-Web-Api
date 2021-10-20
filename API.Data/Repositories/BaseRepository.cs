@@ -91,12 +91,12 @@ namespace Data.Repositories
                 if (result == null)
                     return null;
                 item.UpdateAt = DateTime.UtcNow;
-                context.Entry(result).CurrentValues.SetValues(item);
+                context.Update(item);
                 await context.SaveChangesAsync();
             }
             catch(Exception error) 
             {
-                throw error;
+                //throw error;
             }
             return item;
         }
