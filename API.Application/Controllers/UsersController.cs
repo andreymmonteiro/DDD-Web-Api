@@ -40,20 +40,20 @@ namespace application.Controllers
         }
 
         [HttpGet]
-        [Route("{id}")]
+        [Route("{id}", Name = "GetWithId")]
         public async Task<ActionResult> Get(Guid id)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             try
             {
                 return Ok(await services.Get(id));
             }
-            catch(ArgumentException error)
+            catch (ArgumentException error)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, error.Message);
             }
-            
+
         }
 
         [HttpPost]
@@ -65,6 +65,23 @@ namespace application.Controllers
             {
                 var result = await services.Post(user);
                 if (result != null)
+                    return Created(new Uri(Url.Link("GetWithId", new { id = result.Id })), result);
+                return BadRequest(ModelState);
+            }
+            catch (ArgumentException error)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, error.Message);
+            }
+        }
+        [HttpPut]
+        public async Task<ActionResult> Put([FromBody] UserEntity user)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            try
+            {
+                var result = await services.Put(user);
+                if (result != null)
                     return Ok();
             }
             catch (ArgumentException error)
@@ -72,6 +89,7 @@ namespace application.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, error.Message);
             }
             return Ok();
+
         }
     }
 }

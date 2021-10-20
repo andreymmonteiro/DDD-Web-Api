@@ -63,7 +63,7 @@ namespace Data.Repositories
         {
             try
             {
-                return await DataSet.AsNoTracking().SingleOrDefaultAsync(entity => entity.Equals(id));
+                return await DataSet.AsNoTracking().SingleOrDefaultAsync(entity => entity.Id.Equals(id));
             }
             catch (Exception error) 
             {
