@@ -1,5 +1,7 @@
-﻿using Domain.Entities;
+﻿using Domain.Dtos.User;
+using Domain.Entities;
 using Domain.Interfaces.Services.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -20,6 +22,7 @@ namespace application.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         public async Task<ActionResult> GetAll()
         {
 
@@ -40,6 +43,7 @@ namespace application.Controllers
         }
 
         [HttpGet]
+        [Authorize("Bearer")]
         [Route("{id}", Name = "GetWithId")]
         public async Task<ActionResult> Get(Guid id)
         {
@@ -57,7 +61,8 @@ namespace application.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Post([FromBody] UserEntity user)
+        [Authorize("Bearer")]
+        public async Task<ActionResult> Post([FromBody] UserDtoCreate user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -74,7 +79,8 @@ namespace application.Controllers
             }
         }
         [HttpPut]
-        public async Task<ActionResult> Put([FromBody] UserEntity user)
+        [Authorize("Bearer")]
+        public async Task<ActionResult> Put([FromBody] UserDtoUpdate user)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -93,6 +99,7 @@ namespace application.Controllers
         }
         [HttpDelete]
         [Route("{id}")]
+        [Authorize("Bearer")]
         public async Task<ActionResult> Delete(Guid id)
         {
             if (!ModelState.IsValid)
