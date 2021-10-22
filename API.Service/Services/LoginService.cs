@@ -3,6 +3,7 @@ using Domain.Entities;
 using Domain.Interfaces.Services.Users;
 using Domain.Repository;
 using Domain.Security;
+using Domain.Security.TokenHandlerConfiguration;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -38,41 +39,37 @@ namespace Service.Services
                     authenticated = false,
                     message = "Falha ao autenticar"
                 };
-            ClaimsIdentity identity = new ClaimsIdentity(new GenericIdentity(user.Email), new[]
-                                                                                            {
-                                                                                               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                                                                                               new Claim(JwtRegisteredClaimNames.UniqueName, user.Email)
-                                                                                            });
+            
             DateTime createDate = DateTime.Now;
             DateTime expirionDate = createDate + TimeSpan.FromSeconds(tokenConfiguration.Seconds);
-            var handler = new JwtSecurityTokenHandler();
-            var token = CreateToken(identity, createDate, expirionDate, handler);
+            
+            var token = Token.CreateToken(user, createDate, expirionDate, tokenConfiguration, signingConfigurations);
 
-            return SuccessOject(createDate, expirionDate, token, user);
+            return Token.SuccessOject(createDate, expirionDate, token, user);
         }
-        private string CreateToken(ClaimsIdentity identity, DateTime createDate, DateTime expirionDate, JwtSecurityTokenHandler handler) 
-        {
-            var securityToken = handler.CreateToken(new SecurityTokenDescriptor() 
-            {
-                Issuer = tokenConfiguration.Issuer,
-                Audience = tokenConfiguration.Audience,
-                SigningCredentials = signingConfigurations.SigningCredentials,
-                Subject = identity,
-                NotBefore = createDate,
-                Expires = expirionDate
-            });
-            return handler.WriteToken(securityToken);
-        }
-        private object SuccessOject(DateTime createDate, DateTime expirionDate, string token, LoginDto user) 
-        {
-            return new
-            {
-                authenticated = true,
-                created = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                expiration = expirionDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                acessToken =token,
-                message = "Usuário Logado com sucesso"
-            };
-        }
+        //private string CreateToken(ClaimsIdentity identity, DateTime createDate, DateTime expirionDate, JwtSecurityTokenHandler handler) 
+        //{
+        //    var securityToken = handler.CreateToken(new SecurityTokenDescriptor() 
+        //    {
+        //        Issuer = tokenConfiguration.Issuer,
+        //        Audience = tokenConfiguration.Audience,
+        //        SigningCredentials = signingConfigurations.SigningCredentials,
+        //        Subject = identity,
+        //        NotBefore = createDate,
+        //        Expires = expirionDate
+        //    });
+        //    return handler.WriteToken(securityToken);
+        //}
+        //private object SuccessOject(DateTime createDate, DateTime expirionDate, string token, LoginDto user) 
+        //{
+        //    return new
+        //    {
+        //        authenticated = true,
+        //        created = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
+        //        expiration = expirionDate.ToString("yyyy-MM-dd HH:mm:ss"),
+        //        acessToken =token,
+        //        message = "Usuário Logado com sucesso"
+        //    };
+        //}
     }
 }
