@@ -1,5 +1,6 @@
 ﻿using Domain.Dtos;
 using Domain.Entities;
+using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Users;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -12,8 +13,15 @@ namespace application.Controllers
     [ApiController]
     public class LoginController : ControllerBase
     {
+        private readonly ILoginService service;
+
+        public LoginController(ILoginService service)
+        {
+            this.service = service;
+        }
+
         [HttpPost]
-        public async Task<object> Login([FromBody] LoginDto user, [FromServices] ILoginService service) 
+        public async Task<object> Login([FromBody] LoginDto user) 
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

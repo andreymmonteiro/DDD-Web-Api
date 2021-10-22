@@ -1,8 +1,10 @@
 ﻿using Data.Repositories;
 using Domain.Interfaces;
+using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Users;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Services;
+using Service.Services.TokenServices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +19,7 @@ namespace CrossCutting.DependencyInjetction
         {
             serviceCollection.AddTransient<IUsersService, UserService>();
             serviceCollection.AddTransient<ILoginService, LoginService>();
+            serviceCollection.AddScoped<ITokenService, TokenService>();
 
         }
     }

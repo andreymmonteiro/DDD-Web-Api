@@ -12,6 +12,7 @@ namespace application.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize("Bearer")]
     public class UsersController : ControllerBase
     {
         private readonly IUsersService services;
@@ -22,7 +23,7 @@ namespace application.Controllers
         }
 
         [HttpGet]
-        [Authorize("Bearer")]
+        
         public async Task<ActionResult> GetAll()
         {
 
@@ -43,7 +44,6 @@ namespace application.Controllers
         }
 
         [HttpGet]
-        [Authorize("Bearer")]
         [Route("{id}", Name = "GetWithId")]
         public async Task<ActionResult> Get(Guid id)
         {
@@ -61,7 +61,6 @@ namespace application.Controllers
         }
 
         [HttpPost]
-        [Authorize("Bearer")]
         public async Task<ActionResult> Post([FromBody] UserDtoCreate user)
         {
             if (!ModelState.IsValid)
@@ -79,7 +78,6 @@ namespace application.Controllers
             }
         }
         [HttpPut]
-        [Authorize("Bearer")]
         public async Task<ActionResult> Put([FromBody] UserDtoUpdate user)
         {
             if (!ModelState.IsValid)
@@ -99,7 +97,6 @@ namespace application.Controllers
         }
         [HttpDelete]
         [Route("{id}")]
-        [Authorize("Bearer")]
         public async Task<ActionResult> Delete(Guid id)
         {
             if (!ModelState.IsValid)

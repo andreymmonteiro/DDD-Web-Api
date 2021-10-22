@@ -1,7 +1,6 @@
 using AutoMapper;
 using CrossCutting.DependencyInjetction;
 using CrossCutting.Mappings;
-using Domain.Dtos.User;
 using Domain.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
