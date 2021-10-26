@@ -1,10 +1,12 @@
 ﻿using Domain.Dtos;
-using Domain.Dtos.User;
 using Domain.Interfaces.Services.Token;
+using Domain.Models.Token;
 using Domain.Security;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Security.Principal;
@@ -14,28 +16,104 @@ namespace Service.Services.TokenServices
     public class TokenService : ITokenService
     {
         private SigningConfigurations signingConfigurations;
+        private TokenConfiguration tokenConfiguration;
+        private static TokenModel tokenModel { get; set; } = new TokenModel();
 
-        public TokenService(SigningConfigurations signingConfigurations)
+        public TokenService(SigningConfigurations signingConfigurations, TokenConfiguration tokenConfiguration)
         {
             this.signingConfigurations = signingConfigurations;
-            
+            this.tokenConfiguration = tokenConfiguration;
         }
-        public string GenerateRefreshToken()
+        public string GenerateToken(string username, DateTime createDate, DateTime expirionDate)
+        {
+            var handler = new JwtSecurityTokenHandler();
+            ClaimsIdentity identity = CreateClaim(username);
+            var securityToken = CreateSecurityToken(identity, createDate, expirionDate, handler);
+            return handler.WriteToken(securityToken);
+        }
+        
+        public object SuccessOject(DateTime createDate, DateTime expirionDate, string token, string username)
+        {
+            var refreshToken = GenerateRefreshToken();
+            SaveRefreshToken(username, refreshToken);
+            return new 
+            {
+                Authenticated = true,
+                Created = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                Expiration = expirionDate.ToString("yyyy-MM-dd HH:mm:ss"),
+                AcessToken = token,
+                RefreshToken = refreshToken,
+                Message = "Usuário Logado com sucesso"
+            }; 
+        }
+        public object ReturnRefreshToken(string token, string refreshToken)
+        {
+            //Pega o respectivo claim para extrair seu username (Email),com isso não é necessário exigir do backend para envio
+            var claimPrincipal = GetPrincipalFromToken(token);
+            //Pega o rfresh token antigo
+            var oldRefreshToken = GetRefreshToken(claimPrincipal.Identity.Name);
+            //deleta o antigo refresh token para posteriormente incluir um novo na lista
+            DeleteRefreshToken(claimPrincipal.Identity.Name, oldRefreshToken);
+            //Se o refresh Token enviado é diferente do atual e retorna como uma informação inválida
+            if (oldRefreshToken != refreshToken)
+                return new SecurityTokenException("Invalid Refresh Token!");
+            DateTime createTime = DateTime.Now;
+            DateTime expirationDate = createTime + TimeSpan.FromSeconds(tokenConfiguration.Seconds);
+            //Pega o novo token se tudo ocorreu corretamente
+            var newToken = GenerateToken(claimPrincipal.Identity.Name, createTime, expirationDate);
+            
+
+            return SuccessOject(createTime, expirationDate, newToken, claimPrincipal.Identity.Name);
+        }
+        private ClaimsIdentity CreateClaim(string username)
+        {
+            return new ClaimsIdentity(new GenericIdentity(username), new[]
+                                                                                            {
+                                                                                               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                                                                                               new Claim(JwtRegisteredClaimNames.UniqueName, username)
+                                                                                            });
+        }
+        private void SaveRefreshToken(string username, string refreshToken)
+        {
+            tokenModel.RefreshTokens.Add(new(username.ToLower(), refreshToken));
+        }
+
+        private void DeleteRefreshToken(string username, string refreshToken)
+        {
+            var tokenDelete = tokenModel.RefreshTokens.FirstOrDefault(oldToken => oldToken.Item1.ToLower().Equals(username.ToLower()) && oldToken.Item2.Equals(refreshToken));
+            tokenModel.RefreshTokens.Remove(tokenDelete);
+        }
+
+        private string GetRefreshToken(string username)
+        {
+            return tokenModel.RefreshTokens.FirstOrDefault(token => token.Item1.ToLower().Equals(username.ToLower())).Item2;
+        }
+        private ClaimsPrincipal GetPrincipalFromToken(string token) 
+        {
+            var tokenValidateionParameters = new TokenValidationParameters()
+            {
+                ValidAudience = tokenConfiguration.Audience,
+                IssuerSigningKey = signingConfigurations.Key,
+                ValidIssuer = tokenConfiguration.Issuer,
+                ValidateIssuerSigningKey = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var claimResult = tokenHandler.ValidateToken(token,tokenValidateionParameters, out var securityToken);
+            if (securityToken is not JwtSecurityToken jwtSecurityToken ||
+                !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.RsaSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid Token");
+            return claimResult;
+        }
+        private string GenerateRefreshToken()
         {
             var randomNumber = new byte[32];
             using var rng = RandomNumberGenerator.Create();
             rng.GetBytes(randomNumber);
             return Convert.ToBase64String(randomNumber);
         }
-
-        public string GenerateToken(LoginDto user, TokenConfiguration tokenConfiguration, DateTime createDate, DateTime expirionDate)
-        {
-            var handler = new JwtSecurityTokenHandler();
-            ClaimsIdentity identity = CreateClaim(user);
-            var securityToken = CreateSecurityToken( identity, tokenConfiguration, createDate, expirionDate, handler);
-            return handler.WriteToken(securityToken);
-        }
-        public SecurityToken CreateSecurityToken(ClaimsIdentity identity, TokenConfiguration tokenConfiguration, DateTime createDate, DateTime expirionDate, JwtSecurityTokenHandler handler)
+        private SecurityToken CreateSecurityToken(ClaimsIdentity identity, DateTime createDate, DateTime expirionDate, JwtSecurityTokenHandler handler)
         {
             return handler.CreateToken(new SecurityTokenDescriptor()
             {
@@ -47,25 +125,5 @@ namespace Service.Services.TokenServices
                 Expires = expirionDate
             });
         }
-        public object SuccessOject(DateTime createDate, DateTime expirionDate, string token, LoginDto user)
-        {
-            return new
-            {
-                authenticated = true,
-                created = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                expiration = expirionDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                acessToken = token,
-                message = "Usuário Logado com sucesso"
-            };
-        }
-        public ClaimsIdentity CreateClaim(LoginDto user)
-        {
-            return new ClaimsIdentity(new GenericIdentity(user.Email), new[]
-                                                                                            {
-                                                                                               new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                                                                                               new Claim(JwtRegisteredClaimNames.UniqueName, user.Email)
-                                                                                            });
-        }
-
     }
 }

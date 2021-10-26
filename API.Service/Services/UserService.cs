@@ -2,6 +2,7 @@
 using Domain.Dtos.User;
 using Domain.Entities;
 using Domain.Interfaces;
+using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Users;
 using Domain.Models;
 using System;
@@ -15,7 +16,7 @@ namespace Service.Services
     public class UserService : IUsersService
     {
         private readonly IRepository<UserEntity> repository;
-        private readonly IMapper mapper;
+        private readonly IMapper mapper;        
 
         public UserService(IRepository<UserEntity> repository, IMapper mapper)
         {
@@ -37,7 +38,8 @@ namespace Service.Services
         public async Task<IEnumerable<UserDto>> GetAll()
         {
             var entity  = await repository.SelectAsync();
-            return mapper.Map<IEnumerable<UserDto>>(entity);
+            var resultUserDto = mapper.Map<IEnumerable<UserDto>>(entity);
+            return resultUserDto;
         }
 
         public async Task<UserDtoCreateResult> Post(UserDtoCreate entity)

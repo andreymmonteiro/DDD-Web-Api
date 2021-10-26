@@ -1,6 +1,8 @@
+using application.Header;
 using AutoMapper;
 using CrossCutting.DependencyInjetction;
 using CrossCutting.Mappings;
+using Domain.Models.Token;
 using Domain.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -28,6 +30,8 @@ namespace application
 
         private void CreateTokenConfiguration(IServiceCollection services)
         {
+            //var tokenModel = new TokenModel();
+            //services.AddSingleton(tokenModel);
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
             var tokenConfiguration = new TokenConfiguration();

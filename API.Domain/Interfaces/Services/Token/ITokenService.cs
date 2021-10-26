@@ -13,10 +13,8 @@ namespace Domain.Interfaces.Services.Token
 {
     public interface ITokenService
     {
-        string GenerateRefreshToken();
-        string GenerateToken(LoginDto user, TokenConfiguration tokenConfiguration, DateTime createDate, DateTime expirionDate);
-        SecurityToken CreateSecurityToken(ClaimsIdentity identity, TokenConfiguration tokenConfiguration, DateTime createDate, DateTime expirionDate, JwtSecurityTokenHandler handler);
-        object SuccessOject(DateTime createDate, DateTime expirionDate, string token, LoginDto user);
-        ClaimsIdentity CreateClaim(LoginDto user);
+        string GenerateToken(string username, DateTime createDate, DateTime expirionDate);
+        object SuccessOject(DateTime createDate, DateTime expirionDate, string token, string username);
+        object ReturnRefreshToken(string token, string refreshToken);
     }
 }

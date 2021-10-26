@@ -1,10 +1,12 @@
 ﻿using Domain.Dtos.User;
 using Domain.Entities;
+using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -16,31 +18,34 @@ namespace application.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersService services;
+        private ITokenService tokenService;
 
-        public UsersController(IUsersService services)
+        public UsersController(IUsersService services, ITokenService tokenService)
         {
             this.services = services;
+            this.tokenService = tokenService;
         }
 
         [HttpGet]
         
         public async Task<ActionResult> GetAll()
         {
-
+            var tokenRequest = ((string)Request.Headers.FirstOrDefault(header => header.Key.Equals("Authorization")).Value).Remove(0,7);
+            var refreshToken = Request.Headers.FirstOrDefault(header => header.Key.Equals("RefreshToken")).Value;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                return Ok(await services.GetAll());
+                var token = tokenService.ReturnRefreshToken(tokenRequest, refreshToken);
+                var resultGet = await services.GetAll();
+                return Ok(new { resultGet, token });
             }
             //ArgumentException é para tratar error da controller
             catch (ArgumentException error)
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, error.Message);
             }
-
-
         }
 
         [HttpGet]
