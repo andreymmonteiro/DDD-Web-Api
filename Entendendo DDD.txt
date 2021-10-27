@@ -1,0 +1,59 @@
+Criamos o MyContext 
+
+Criamos um BaseEntity que será responsável por ter propriedades que todas as Entitys terão
+
+Criamos o IRepository para que ela seja implementada quando a classe possuir BaseEntity com os inserts, deletes, selects...
+
+Criamos uma BaseRepository para implementar o IRepository enquanto herda de BaseEntity para aplicar e crirar os métodos de IRepository.
+
+Criamos uma Model (Exemplo: User de autenticação)
+
+Criamos o map dele para Migration (UserMap)
+
+Após, fazer a migration e update.
+
+Criamos um IUserRepository para definir método que só esse user tem
+
+Criamos um UserImplementation para receber implementar o BaseRepository (Passar o context para o base) e IUserRepository para então criar o método que ele em específico terá, nesse caso FindByLogin para autenticação.
+
+Criamos um IUsersService para funções desse usuário: Get(Guid id), GetAll(), Post...
+
+Criamos o USersService para implementar o IUserService e criar seus métodos GetAll(), etc... e ele vai receber IRepository para buscar dados no DB
+
+Criamos o ILoginService que ter em sua declaração o método FindByLogin() que é aquela particularidade que só esse model User tem, para autenticação.
+
+Criamos o LoginService para implementar o ILoginService e criar o método FindByLogin(). No construtor colocarmos o IUserRepository para ter acesso ao FindByLogin que irá retornar a lógica usada lá em UserImplementation. Nesse método do LoginService usamos umas regras de negócio para validação para ai sim usar o FindByLogin usado em UserImplementation.
+
+Criamos uma classe para configurar as injeções de dependências na camada CrossCutting e incluímos: 
+	Classe de ConfigureService e outra para ConfigureRepository
+
+ConfigureRepository - 
+	BaseRepository, IRepository
+	IUserRepository, UserImplementation
+	AddContext(MyContext)
+
+ConfigureService -
+	ILoginService, LoginService
+	IUsersServices, UsersServices
+
+Criação das Dtos
+
+Criamos classe model Dto para criação da model (nesse caso user), atualização e exibição para o usuário e ajuste nas IUsersServices e IUserRepository
+
+Criamos agora as classe que irão mapear (AutoMapper) um model para outro (UserModel - UserCreateDto, etc.)
+
+No IUsersService e UsersService vamos ajustar as models para suas respectivas Dtos (Post - UserCreateDto, Put - UserUpdateDto, etc)
+
+Token Auth
+
+Usamos o JWT para autenticar na aplicação 
+
+
+
+
+
+
+
+
+
+

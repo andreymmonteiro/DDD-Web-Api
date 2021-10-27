@@ -11,13 +11,13 @@ namespace Service.Services
 {
     public class LoginService : ILoginService
     {
-        private IUserRepository repository;
+        private IUserRepository userRepository;
         private TokenConfiguration tokenConfiguration;
         private ITokenService token;
 
         public LoginService(IUserRepository repository, SigningConfigurations signingConfigurations, TokenConfiguration tokenConfiguration, ITokenService token)
         {
-            this.repository = repository;
+            this.userRepository = repository;
             this.tokenConfiguration = tokenConfiguration;
             this.token = token;
         }
@@ -26,7 +26,7 @@ namespace Service.Services
         {
             UserEntity baseUser = null;
             if (user != null && !string.IsNullOrWhiteSpace(user.Email))
-                baseUser = await repository.FindByLogin(user.Email);
+                baseUser = await userRepository.FindByLogin(user.Email);
             if (baseUser == null)
                 return new
                 {

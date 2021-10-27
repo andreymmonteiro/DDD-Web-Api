@@ -35,7 +35,7 @@ namespace Service.Services.TokenServices
             SaveRefreshToken(username,refreshToken);
             return new TokenModel() { AcessToken = token, RefreshToken = refreshToken };
         }
-        
+
         public object SuccessOject(DateTime createDate, DateTime expirionDate, TokenModel token, string username)
         {
             return new 
@@ -60,14 +60,11 @@ namespace Service.Services.TokenServices
                 DeleteRefreshToken(claimPrincipal.Identity.Name, oldRefreshToken);
                 //Se o refresh Token enviado é diferente do atual e retorna como uma informação inválida
                 if (oldRefreshToken != refreshToken)
-                    throw new SecurityTokenException("Invalid Refresh Token!");
+                    throw new SecurityTokenException("Invalid Refresh Token! Do login Again");
                 DateTime createTime = DateTime.Now;
                 DateTime expirationDate = createTime + TimeSpan.FromSeconds(tokenConfiguration.Seconds);
                 //Pega o novo token se tudo ocorreu corretamente
                 var newToken = GenerateToken(claimPrincipal.Identity.Name, createTime, expirationDate);
-
-                var refreshTokenGenerated = GenerateRefreshToken();
-                SaveRefreshToken(claimPrincipal.Identity.Name, refreshTokenGenerated);
 
                 return SuccessOject(createTime, expirationDate, newToken, claimPrincipal.Identity.Name);
             }

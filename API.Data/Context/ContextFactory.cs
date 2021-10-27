@@ -10,8 +10,6 @@ namespace Data.Context
 {
     public class ContextFactory : IDesignTimeDbContextFactory<MyContext>
     {
-        private string stringConnection { get; set; }
-
         public MyContext CreateDbContext(string[] args)
         {
             var connectionString = "Server=127.0.0.1;Port=3306;Database=dbAPI;Uid=root;Pwd=masterkey";
@@ -22,9 +20,5 @@ namespace Data.Context
 
             return new MyContext(optionsBuilder.Options);
         }
-        //public ContextFactory(string stringConnection) => this.stringConnection = stringConnection;
-
-        
-
     }
 }

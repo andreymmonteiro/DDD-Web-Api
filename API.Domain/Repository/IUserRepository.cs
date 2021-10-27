@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Repository
 {
-    public interface IUserRepository : IRepository<UserEntity>
+    public interface IUserRepository 
     {
         Task<UserEntity> FindByLogin(string email);
     }
