@@ -1,3 +1,4 @@
+using application.Controllers;
 using application.Header;
 using AutoMapper;
 using CrossCutting.DependencyInjetction;
@@ -32,6 +33,7 @@ namespace application
         {
             //var tokenModel = new TokenModel();
             //services.AddSingleton(tokenModel);
+            
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
             var tokenConfiguration = new TokenConfiguration();

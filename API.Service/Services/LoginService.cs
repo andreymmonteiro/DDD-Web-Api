@@ -39,7 +39,7 @@ namespace Service.Services
 
             //var token = Token.GenerateToken(user, createDate, expirionDate, tokenConfiguration, signingConfigurations);
             var tokenResult = token.GenerateToken(user.Email,createDate, expirionDate);
-
+            
             return  token.SuccessOject(createDate, expirionDate, tokenResult, user.Email);
         }
     }

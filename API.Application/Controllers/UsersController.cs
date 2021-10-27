@@ -1,12 +1,9 @@
 ﻿using Domain.Dtos.User;
-using Domain.Entities;
 using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Users;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -30,16 +27,14 @@ namespace application.Controllers
         
         public async Task<ActionResult> GetAll()
         {
-            var tokenRequest = ((string)Request.Headers.FirstOrDefault(header => header.Key.Equals("Authorization")).Value).Remove(0,7);
-            var refreshToken = Request.Headers.FirstOrDefault(header => header.Key.Equals("RefreshToken")).Value;
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var token = tokenService.ReturnRefreshToken(tokenRequest, refreshToken);
+                //var token = new AuthBaseController(tokenService,Request).CreateToken();
                 var resultGet = await services.GetAll();
-                return Ok(new { resultGet, token });
+                return Ok(resultGet);
             }
             //ArgumentException é para tratar error da controller
             catch (ArgumentException error)

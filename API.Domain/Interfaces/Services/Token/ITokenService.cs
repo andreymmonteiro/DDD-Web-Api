@@ -1,4 +1,5 @@
 ﻿using Domain.Dtos;
+using Domain.Models.Token;
 using Domain.Security;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -13,8 +14,8 @@ namespace Domain.Interfaces.Services.Token
 {
     public interface ITokenService
     {
-        string GenerateToken(string username, DateTime createDate, DateTime expirionDate);
-        object SuccessOject(DateTime createDate, DateTime expirionDate, string token, string username);
+        TokenModel GenerateToken(string username, DateTime createDate, DateTime expirionDate);
+        object SuccessOject(DateTime createDate, DateTime expirionDate, TokenModel token, string username);
         object ReturnRefreshToken(string token, string refreshToken);
     }
 }
