@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20211018183514_primeiroMigration")]
-    partial class primeiroMigration
+    [Migration("20211029185941_mySql")]
+    partial class mySql
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -19,7 +19,7 @@ namespace Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64)
                 .HasAnnotation("ProductVersion", "5.0.11");
 
-            modelBuilder.Entity("Domain.Entities.UserEntity", b =>
+            modelBuilder.Entity("Domain.Entities.UsersEntity", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -45,7 +45,17 @@ namespace Data.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("User");
+                    b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("61d89280-3cfd-4634-bea4-958adb490c05"),
+                            CreateAt = new DateTime(2021, 10, 29, 15, 59, 40, 488, DateTimeKind.Local).AddTicks(2868),
+                            Email = "baki@hanma.com",
+                            Name = "Baki Hanma",
+                            UpdateAt = new DateTime(2021, 10, 29, 15, 59, 40, 495, DateTimeKind.Local).AddTicks(8433)
+                        });
                 });
 #pragma warning restore 612, 618
         }

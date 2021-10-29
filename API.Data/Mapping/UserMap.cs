@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Data.Mapping
 {
-    public class UserMap : IEntityTypeConfiguration<UserEntity>
+    public class UserMap : IEntityTypeConfiguration<UsersEntity>
     {
-        public void Configure(EntityTypeBuilder<UserEntity> builder)
+        public void Configure(EntityTypeBuilder<UsersEntity> builder)
         {
-            builder.ToTable("User");
+            builder.ToTable("Users");
 
             builder.HasKey(p => p.Id);
             builder.HasIndex(i => i.Email).IsUnique();

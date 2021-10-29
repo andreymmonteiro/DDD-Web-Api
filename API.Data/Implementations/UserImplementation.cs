@@ -11,14 +11,14 @@ using System.Threading.Tasks;
 
 namespace Data.Implementations
 {
-    public class UserImplementation : BaseRepository<UserEntity>, IUserRepository
+    public class UserImplementation : BaseRepository<UsersEntity>, IUserRepository
     {
-        private DbSet<UserEntity> DataSet;
+        private DbSet<UsersEntity> DataSet;
         public UserImplementation(MyContext context) : base(context)
         {
-            this.DataSet = context.Set<UserEntity>();
+            this.DataSet = context.Set<UsersEntity>();
         }
-        public async Task<UserEntity> FindByLogin(string email)
+        public async Task<UsersEntity> FindByLogin(string email)
         {
             return await DataSet.FirstOrDefaultAsync(user => user.Email.Equals(email));
         }

@@ -13,7 +13,9 @@ namespace Data.Context
         public MyContext CreateDbContext(string[] args)
         {
             var connectionString = "Server=127.0.0.1;Port=3306;Database=dbAPI;Uid=root;Pwd=masterkey";
+            //var connectionString = "Server=.\\SQLEXPRESS;Initial Catalog=dbapi;MultipleActiveResultSets=true;User ID=sa;Password=masterkey";
             var optionsBuilder = new DbContextOptionsBuilder<MyContext>();
+            //optionsBuilder.UseSqlServer(connectionString);
             optionsBuilder.UseMySql(connectionString,
                 ServerVersion.Parse("5.7-mysql"),
                 options => options.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null));

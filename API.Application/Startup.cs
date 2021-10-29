@@ -3,6 +3,7 @@ using application.Header;
 using AutoMapper;
 using CrossCutting.DependencyInjetction;
 using CrossCutting.Mappings;
+using Data.Context;
 using Domain.Models.Token;
 using Domain.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -31,14 +32,14 @@ namespace application
 
         private void CreateTokenConfiguration(IServiceCollection services)
         {
-            //var tokenModel = new TokenModel();
-            //services.AddSingleton(tokenModel);
-            
+            var refreshTokenConfiguration = new RefreshTokenConfiguration();
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
             var tokenConfiguration = new TokenConfiguration();
             new ConfigureFromConfigurationOptions<TokenConfiguration>(Configuration.GetSection("TokenConfigurations")).Configure(tokenConfiguration);
+            new ConfigureFromConfigurationOptions<RefreshTokenConfiguration>(Configuration.GetSection("RefreshTokenConfiguration")).Configure(refreshTokenConfiguration);
             services.AddSingleton(tokenConfiguration);
+            services.AddSingleton(refreshTokenConfiguration);
 
             services.AddAuthentication(auth =>
             {
@@ -58,14 +59,14 @@ namespace application
                                                                         .AddAuthenticationSchemes(JwtBearerDefaults.AuthenticationScheme)
                                                                         .RequireAuthenticatedUser().Build()));
         }
-        private void ConfigureAutoMapp(IServiceCollection services) 
+        private void ConfigureAutoMapp(IServiceCollection services)
         {
             var config = new AutoMapper.MapperConfiguration(map =>
             {
                 map.AddProfile(new DtoToModelProfile());
                 map.AddProfile(new EntityToDtoProfile());
                 map.AddProfile(new ModelToEntityProfile());
-            }) ;
+            });
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
         }
@@ -75,6 +76,7 @@ namespace application
         {
             ConfigureService.ConfigureDependencyInjection(services);
             ConfigureRepository.stringConnection = Configuration.GetConnectionString("Default");
+            ConfigureRepository.database = Configuration.GetSection("DataBase").GetSection("DATABASE").Value;
             ConfigureRepository.ConfigureDependencyInjection(services);
 
             CreateTokenConfiguration(services);
@@ -114,7 +116,7 @@ namespace application
                             },
                             new List<string>()
                     }
-                }); 
+                });
             });
         }
 
@@ -136,6 +138,11 @@ namespace application
             {
                 endpoints.MapControllers();
             });
+            if (Configuration.GetSection("DataBase").GetSection("MIGRATION").Value.ToLower() == "APPLY".ToLower())
+                using (var service = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
+                                                            .CreateScope())
+                using (var context = service.ServiceProvider.GetService<MyContext>())
+                    context.Database.Migrate();
         }
     }
 }

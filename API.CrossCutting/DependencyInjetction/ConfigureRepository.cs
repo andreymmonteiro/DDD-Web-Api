@@ -1,4 +1,5 @@
-﻿using Data.Context;
+﻿using Data;
+using Data.Context;
 using Data.Implementations;
 using Data.Repositories;
 using Domain.Interfaces;
@@ -16,13 +17,27 @@ namespace CrossCutting.DependencyInjetction
     public class ConfigureRepository
     {
         public static string stringConnection { get; set; }
+        public static string database { get; set; }
+        private static IDatabaseImplementation db;
         public static void ConfigureDependencyInjection(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
-            serviceCollection.AddDbContext<MyContext>(
-                options => options.UseMySql(stringConnection, ServerVersion.Parse("5.7-mysql"))
-                );
+            CreateServiceConnectionDb(serviceCollection);
             serviceCollection.AddScoped<IUserRepository, UserImplementation>();
+        }
+        private static void CreateServiceConnectionDb(IServiceCollection serviceCollection) 
+        {
+
+            switch (database) 
+            {
+                case "sqlserver" :
+                    db = new DatabaseImplementationSqlServer(stringConnection, serviceCollection);
+                    break;
+                default:
+                    db = new DatabaseImplementationMySql(stringConnection, serviceCollection);
+                    break;
+            }
+            db.AddDbContext();
         }
     }
 }

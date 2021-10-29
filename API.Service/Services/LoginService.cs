@@ -17,14 +17,14 @@ namespace Service.Services
 
         public LoginService(IUserRepository repository, SigningConfigurations signingConfigurations, TokenConfiguration tokenConfiguration, ITokenService token)
         {
-            this.userRepository = repository;
+            userRepository = repository;
             this.tokenConfiguration = tokenConfiguration;
             this.token = token;
         }
 
         public async Task<object> FindByLogin(LoginDto user)
         {
-            UserEntity baseUser = null;
+            UsersEntity baseUser = null;
             if (user != null && !string.IsNullOrWhiteSpace(user.Email))
                 baseUser = await userRepository.FindByLogin(user.Email);
             if (baseUser == null)
@@ -35,7 +35,7 @@ namespace Service.Services
                 };
             
             DateTime createDate = DateTime.Now;
-            DateTime expirionDate = createDate + TimeSpan.FromSeconds(tokenConfiguration.Seconds);
+            DateTime expirionDate =  token.CreateDateExpiration(tokenConfiguration.Seconds,createDate);
 
             //var token = Token.GenerateToken(user, createDate, expirionDate, tokenConfiguration, signingConfigurations);
             var tokenResult = token.GenerateToken(user.Email,createDate, expirionDate);

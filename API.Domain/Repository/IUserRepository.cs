@@ -6,6 +6,6 @@ namespace Domain.Repository
 {
     public interface IUserRepository 
     {
-        Task<UserEntity> FindByLogin(string email);
+        Task<UsersEntity> FindByLogin(string email);
     }
 }

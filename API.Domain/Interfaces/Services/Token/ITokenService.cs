@@ -17,5 +17,7 @@ namespace Domain.Interfaces.Services.Token
         TokenModel GenerateToken(string username, DateTime createDate, DateTime expirionDate);
         object SuccessOject(DateTime createDate, DateTime expirionDate, TokenModel token, string username);
         object ReturnRefreshToken(string token, string refreshToken);
+        DateTime CreateDateExpiration(int Seconds, DateTime createTime);
+
     }
 }

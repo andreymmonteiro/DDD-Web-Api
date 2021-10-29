@@ -15,10 +15,10 @@ namespace Service.Services
 {
     public class UserService : IUsersService
     {
-        private readonly IRepository<UserEntity> repository;
+        private readonly IRepository<UsersEntity> repository;
         private readonly IMapper mapper;        
 
-        public UserService(IRepository<UserEntity> repository, IMapper mapper)
+        public UserService(IRepository<UsersEntity> repository, IMapper mapper)
         {
             this.repository = repository;
             this.mapper = mapper;
@@ -45,7 +45,7 @@ namespace Service.Services
         public async Task<UserDtoCreateResult> Post(UserDtoCreate entity)
         {
             var model = mapper.Map<UserModel>(entity);
-            var modelEntity = mapper.Map<UserEntity>(model);
+            var modelEntity = mapper.Map<UsersEntity>(model);
             modelEntity = await repository.InsertAsync(modelEntity);
             return mapper.Map<UserDtoCreateResult>(modelEntity);
         }
@@ -53,7 +53,7 @@ namespace Service.Services
         public async Task<UserDtoUpdateResult> Put(UserDtoUpdate entity)
         {
             var model = mapper.Map<UserModel>(entity);
-            var modelEntity = mapper.Map<UserEntity>(model);
+            var modelEntity = mapper.Map<UsersEntity>(model);
             modelEntity = await repository.UpdateAsync(modelEntity);
             return mapper.Map<UserDtoUpdateResult>(modelEntity);
         }

@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Models.Token
 {
-    public class TokenModel
+    public class RefreshTokenModel
     {
-        public string AcessToken { get; set; }
-        public RefreshTokenModel RefreshTokenModel { get; set; }
+        public DateTime Expiration { get; set;  }
+        public List<(string, string)> RefreshTokens { get; set; }
     }
 }
