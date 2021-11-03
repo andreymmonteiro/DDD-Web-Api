@@ -1,25 +1,28 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30114.105
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31710.8
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "application", "API.Application\application.csproj", "{98DC7C74-0E97-4F54-8BFE-8C455837805F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "application", "API.Application\application.csproj", "{98DC7C74-0E97-4F54-8BFE-8C455837805F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "API.Domain\Domain.csproj", "{4D0A2797-4D2A-4C17-BF69-15BC803B3F3A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "API.Domain\Domain.csproj", "{4D0A2797-4D2A-4C17-BF69-15BC803B3F3A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CrossCutting", "API.CrossCutting\CrossCutting.csproj", "{F0EEAF29-99FE-4C2C-954C-D660D9A36B69}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CrossCutting", "API.CrossCutting\CrossCutting.csproj", "{F0EEAF29-99FE-4C2C-954C-D660D9A36B69}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Data", "API.Data\Data.csproj", "{4617C372-A280-453E-B4DB-A0BA3A48E29E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Data", "API.Data\Data.csproj", "{4617C372-A280-453E-B4DB-A0BA3A48E29E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service", "API.Service\Service.csproj", "{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "API.Service\Service.csproj", "{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Data.Test", "API.Data.Test\API.Data.Test.csproj", "{2C40A9AD-654A-49A4-BA96-E61603164323}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Service.Test", "API.Service.Test\API.Service.Test.csproj", "{901DAA19-DC29-414B-B644-A897CD3D78A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "API.Application.Test", "API.Application.Test\API.Application.Test.csproj", "{7FBCCC30-BDB4-4809-96E5-1C2C02C74AEA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{98DC7C74-0E97-4F54-8BFE-8C455837805F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -42,5 +45,23 @@ Global
 		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8DEB4D64-6D1E-49AC-BE71-B53749CB6110}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C40A9AD-654A-49A4-BA96-E61603164323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C40A9AD-654A-49A4-BA96-E61603164323}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C40A9AD-654A-49A4-BA96-E61603164323}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C40A9AD-654A-49A4-BA96-E61603164323}.Release|Any CPU.Build.0 = Release|Any CPU
+		{901DAA19-DC29-414B-B644-A897CD3D78A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{901DAA19-DC29-414B-B644-A897CD3D78A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{901DAA19-DC29-414B-B644-A897CD3D78A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{901DAA19-DC29-414B-B644-A897CD3D78A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FBCCC30-BDB4-4809-96E5-1C2C02C74AEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FBCCC30-BDB4-4809-96E5-1C2C02C74AEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FBCCC30-BDB4-4809-96E5-1C2C02C74AEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FBCCC30-BDB4-4809-96E5-1C2C02C74AEA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {306DC3F3-DF35-407B-90A6-CDB5851A697D}
 	EndGlobalSection
 EndGlobal

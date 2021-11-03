@@ -85,7 +85,7 @@ namespace Service.Services.TokenServices
             {
                 throw new SecurityTokenException($"Invalid Refresh Token - {error.Message}");
             }
-            return null;
+            return new { };
         }
 
         private ClaimsIdentity CreateClaim(string username)

@@ -15,12 +15,10 @@ namespace application.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUsersService services;
-        private ITokenService tokenService;
 
-        public UsersController(IUsersService services, ITokenService tokenService)
+        public UsersController(IUsersService services)
         {
             this.services = services;
-            this.tokenService = tokenService;
         }
 
         [HttpGet]
