@@ -35,7 +35,9 @@ namespace Service.Services
                 };
             
             DateTime createDate = DateTime.Now;
+            
             DateTime expirionDate =  token.CreateDateExpiration(tokenConfiguration.Seconds,createDate);
+            
 
             //var token = Token.GenerateToken(user, createDate, expirionDate, tokenConfiguration, signingConfigurations);
             var tokenResult = token.GenerateToken(user.Email,createDate, expirionDate);

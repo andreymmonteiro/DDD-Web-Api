@@ -40,5 +40,10 @@ namespace API.Application.Test.User.RequiredApplication
             Assert.Equal(userDtoCreateResult.Name, userDtoCreate.Name);
             Assert.Equal(userDtoCreateResult.Email, userDtoCreate.Email);
         }
+        private void BAD_REQUEST()
+        {
+            
+
+        }
     }
 }

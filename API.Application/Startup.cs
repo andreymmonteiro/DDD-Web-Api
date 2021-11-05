@@ -15,6 +15,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Service.Services.Mapper;
 using System;
 using System.Collections.Generic;
 
@@ -22,11 +23,12 @@ namespace application
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            this.environment = environment;
         }
-
+        public IWebHostEnvironment environment { get; }
         public IConfiguration Configuration { get; }
 
         private void CreateTokenConfiguration(IServiceCollection services)
@@ -35,9 +37,22 @@ namespace application
             var signingConfigurations = new SigningConfigurations();
             services.AddSingleton(signingConfigurations);
             var tokenConfiguration = new TokenConfiguration();
-            new ConfigureFromConfigurationOptions<TokenConfiguration>(Configuration.GetSection("TokenConfigurations")).Configure(tokenConfiguration);
-            new ConfigureFromConfigurationOptions<RefreshTokenConfiguration>(Configuration.GetSection("RefreshTokenConfiguration")).Configure(refreshTokenConfiguration);
+            if (!environment.IsEnvironment("Testing"))
+            {
+                new ConfigureFromConfigurationOptions<TokenConfiguration>(Configuration.GetSection("TokenConfigurations")).Configure(tokenConfiguration);
+            }
+            else
+            {
+                tokenConfiguration = new TokenConfiguration()
+                {
+                    Audience = Environment.GetEnvironmentVariable("Audience"),
+                    Issuer = Environment.GetEnvironmentVariable("Issuer"),
+                    Seconds = Int32.Parse(Environment.GetEnvironmentVariable("Seconds"))
+                };
+            }
+
             services.AddSingleton(tokenConfiguration);
+            new ConfigureFromConfigurationOptions<RefreshTokenConfiguration>(Configuration.GetSection("RefreshTokenConfiguration")).Configure(refreshTokenConfiguration);
             services.AddSingleton(refreshTokenConfiguration);
 
             services.AddAuthentication(auth =>
@@ -60,13 +75,7 @@ namespace application
         }
         private void ConfigureAutoMapp(IServiceCollection services)
         {
-            var config = new AutoMapper.MapperConfiguration(map =>
-            {
-                map.AddProfile(new DtoToModelProfile());
-                map.AddProfile(new EntityToDtoProfile());
-                map.AddProfile(new ModelToEntityProfile());
-            });
-            IMapper mapper = config.CreateMapper();
+            IMapper mapper = new AutoMapperFixture().GetMapper();
             services.AddSingleton(mapper);
         }
 
@@ -74,8 +83,24 @@ namespace application
         public void ConfigureServices(IServiceCollection services)
         {
             ConfigureService.ConfigureDependencyInjection(services);
-            ConfigureRepository.stringConnection = Configuration.GetConnectionString("Default");
-            ConfigureRepository.database = Configuration.GetSection("DataBase").GetSection("DATABASE").Value;
+            if (environment.IsEnvironment("Testing")) 
+            {
+                Environment.SetEnvironmentVariable("DB_CONNECTION", "Persist Security Info=true;Server=localhost;Port=3306;Database=dbApiTest;Uid=root;Pwd=masterkey");
+                Environment.SetEnvironmentVariable("DATABASE", "MYSQL");
+                Environment.SetEnvironmentVariable("MIGRATION", "APPLY");
+                Environment.SetEnvironmentVariable("Audience", "exampleAudience");
+                Environment.SetEnvironmentVariable("Issuer", "exampleIssuer");
+                Environment.SetEnvironmentVariable("Seconds", "120");
+                ConfigureRepository.stringConnection = Environment.GetEnvironmentVariable("DB_CONNECTION");
+                ConfigureRepository.database = Environment.GetEnvironmentVariable("DATABASE");
+
+            }
+            else 
+            {
+                ConfigureRepository.stringConnection = Configuration.GetConnectionString("Default");
+                ConfigureRepository.database = Configuration.GetSection("DataBase").GetSection("DATABASE").Value;
+            }
+
             ConfigureRepository.ConfigureDependencyInjection(services);
 
             CreateTokenConfiguration(services);
@@ -92,8 +117,8 @@ namespace application
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "application", Version = "v1" });
-                //Inclui definições para o botão de autorização do Swagger
-                //Aqui é parametrizado como será a autorização e os detalhes do botão
+                //Inclui definiï¿½ï¿½es para o botï¿½o de autorizaï¿½ï¿½o do Swagger
+                //Aqui ï¿½ parametrizado como serï¿½ a autorizaï¿½ï¿½o e os detalhes do botï¿½o
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Informe o Token",
@@ -101,7 +126,7 @@ namespace application
                     In = ParameterLocation.Header,
                     Type = SecuritySchemeType.ApiKey
                 });
-                //Aqui é onde ele aplica as configurações de auth para que seja possível utilizar os métodos da controller
+                //Aqui ï¿½ onde ele aplica as configuraï¿½ï¿½es de auth para que seja possï¿½vel utilizar os mï¿½todos da controller
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
@@ -120,9 +145,9 @@ namespace application
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app)
         {
-            if (env.IsDevelopment())
+            if (environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -137,7 +162,13 @@ namespace application
             {
                 endpoints.MapControllers();
             });
-            if (Configuration.GetSection("DataBase").GetSection("MIGRATION").Value.ToLower() == "APPLY".ToLower())
+            var apply = "";
+            if (!environment.IsEnvironment("Testing"))
+                apply = Configuration.GetSection("DataBase").GetSection("MIGRATION").Value.ToLower();
+            else
+                apply = Environment.GetEnvironmentVariable("MIGRATION").ToLower();
+
+            if (apply == "APPLY".ToLower())
                 using (var service = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>()
                                                             .CreateScope())
                 using (var context = service.ServiceProvider.GetService<MyContext>())

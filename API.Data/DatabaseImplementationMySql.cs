@@ -20,7 +20,7 @@ namespace Data
         {
             services.AddDbContext<MyContext>(
                 options => options.UseMySql(ConnectionString, ServerVersion.Parse("5.7-mysql"))
-                ) ;
+                );
         }
     }
 }
