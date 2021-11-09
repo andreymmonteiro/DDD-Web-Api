@@ -87,7 +87,7 @@ namespace Data.Repositories
             {
                 var result = await DataSet.AsNoTracking().SingleOrDefaultAsync(entity => entity.Id.Equals(item.Id));
                 if (result == null)
-                    return null;
+                    return null; 
                 item.UpdateAt = DateTime.UtcNow;
                 context.Update(item);
                 await context.SaveChangesAsync();

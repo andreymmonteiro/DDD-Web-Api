@@ -18,8 +18,8 @@ namespace API.Integration.Test.User
         private List<UserDtoCreate> usersDtoCreate { get; set; } = new List<UserDtoCreate>();
         private Random random = new Random();
 
-        [Fact(DisplayName ="Can execute Post.")]
-        public async Task CAN_POST() 
+        [Fact(DisplayName ="Can execute CRUD.")]
+        public async Task CAN_CRUD() 
         {
             await AddToken();
             int countUsers = random.Next(numericRandon) + 1;
@@ -42,7 +42,7 @@ namespace API.Integration.Test.User
             var userModel = await GetAll();
             var userDtoUpdate = mapper.Map<UserDtoUpdate>(userModel[random.Next(countUsers)]);
             await Put(userDtoUpdate);
-
+            await Delete(userModel[random.Next(countUsers)].Id);
         }
 
         private async Task<List<UserModel>> GetAll() 
@@ -87,6 +87,13 @@ namespace API.Integration.Test.User
             Assert.Equal(user.Name, resultObject.Name);
             Assert.Equal(user.Email, resultObject.Email);
             Assert.Equal(user.Id, resultObject.Id);
+        }
+        private async Task Delete(Guid Id) 
+        {
+            response = await DeleteDataAsync($"{hostApi}users/{Id}", client);
+            Assert.Equal(HttpStatusCode.OK, response.StatusCode);
+            var idDeleted = JsonConvert.DeserializeObject<Guid>(await response.Content.ReadAsStringAsync());
+            Assert.Equal(Id, idDeleted);
         }
     }
 }

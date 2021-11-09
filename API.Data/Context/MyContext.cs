@@ -1,4 +1,5 @@
 ﻿using Data.Mapping;
+using Data.Seeds;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -8,6 +9,9 @@ namespace Data.Context
     public class MyContext : DbContext
     {
         public DbSet<UsersEntity> User { get; set;  }
+        public DbSet<UfEntity> Uf { get; set; }
+        public DbSet<MunicipioEntity> Municipio { get; set; }
+        public DbSet<CepEntity> Cep { get; set; }
         
         public MyContext(DbContextOptions<MyContext> options): base(options)
         {
@@ -29,6 +33,10 @@ namespace Data.Context
                     UpdateAt = DateTime.Now
                 }
             );
+            modelbuilder.Entity<UfEntity>(new UfMap().Configure);
+            modelbuilder.Entity<MunicipioEntity>(new MunicipioMap().Configure);
+            modelbuilder.Entity<CepEntity>(new CepMap().Configure);
+            UfSeeds.Ufs(modelbuilder);
         }
     }
 }

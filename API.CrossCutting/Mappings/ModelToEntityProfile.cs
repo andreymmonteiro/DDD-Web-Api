@@ -13,7 +13,26 @@ namespace CrossCutting.Mappings
     {
         public ModelToEntityProfile()
         {
+            UserProfile();
+            UfProfile();
+            MunicipioProfile();
+            CepProfile();
+        }
+        private void UserProfile() 
+        {
             CreateMap<UsersEntity, UserModel>().ReverseMap();
+        }
+        private void UfProfile() 
+        {
+            CreateMap<UfEntity, UfModel>().ReverseMap();
+        }
+        private void MunicipioProfile() 
+        {
+            CreateMap<CepModel, CepEntity>().ReverseMap();
+        }
+        private void CepProfile() 
+        {
+            CreateMap<CepModel, CepEntity>().ReverseMap();
         }
     }
 }

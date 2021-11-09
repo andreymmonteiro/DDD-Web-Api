@@ -24,6 +24,10 @@ namespace CrossCutting.DependencyInjetction
             serviceCollection.AddScoped(typeof(IRepository<>), typeof(BaseRepository<>));
             CreateServiceConnectionDb(serviceCollection);
             serviceCollection.AddScoped<IUserRepository, UserImplementation>();
+            serviceCollection.AddTransient<IUfRepository, UfImplementations>();
+            serviceCollection.AddTransient<IMunicipioRepository, MunicipioImplementations>();
+            serviceCollection.AddTransient<ICepRepository, CepImplementations>();
+            
         }
         private static void CreateServiceConnectionDb(IServiceCollection serviceCollection) 
         {

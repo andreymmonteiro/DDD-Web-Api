@@ -39,9 +39,11 @@ namespace API.Integration.Test
 
         public void Dispose()
         {
+            
             myContext.Database.EnsureDeleted();
             myContext.Dispose();
             client.Dispose();
+
         }
         public async Task AddToken()
         {
@@ -67,6 +69,10 @@ namespace API.Integration.Test
         {
             return await client.PutAsync(url, new StringContent(JsonConvert.SerializeObject(classObject),
                 System.Text.Encoding.UTF8, "application/json"));
+        }
+        public static async Task<HttpResponseMessage> DeleteDataAsync(string url,HttpClient client) 
+        {
+            return await client.DeleteAsync(url);
         }
     }
 }

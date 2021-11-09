@@ -2,6 +2,7 @@
 using Domain.Interfaces;
 using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Users;
+using Domain.Repository;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Services;
 using Service.Services.TokenServices;
@@ -20,7 +21,6 @@ namespace CrossCutting.DependencyInjetction
             serviceCollection.AddTransient<IUsersService, UserService>();
             serviceCollection.AddTransient<ILoginService, LoginService>();
             serviceCollection.AddSingleton<ITokenService, TokenService>();
-
         }
     }
 }

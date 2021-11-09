@@ -9,7 +9,7 @@ namespace Data.Mapping
     {
         public void Configure(EntityTypeBuilder<UsersEntity> builder)
         {
-            builder.ToTable("Users");
+            builder.ToTable("User");
 
             builder.HasKey(p => p.Id);
             builder.HasIndex(i => i.Email).IsUnique();
