@@ -28,7 +28,7 @@ namespace CrossCutting.Mappings
         }
         private void MunicipioProfile() 
         {
-            CreateMap<CepModel, CepEntity>().ReverseMap();
+            CreateMap<MunicipioEntity, MunicipioModel>().ReverseMap();
         }
         private void CepProfile() 
         {

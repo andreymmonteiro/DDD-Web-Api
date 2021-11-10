@@ -1,6 +1,8 @@
 ﻿using Data.Repositories;
 using Domain.Interfaces;
+using Domain.Interfaces.Services.Municipio;
 using Domain.Interfaces.Services.Token;
+using Domain.Interfaces.Services.Uf;
 using Domain.Interfaces.Services.Users;
 using Domain.Repository;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,8 @@ namespace CrossCutting.DependencyInjetction
             serviceCollection.AddTransient<IUsersService, UserService>();
             serviceCollection.AddTransient<ILoginService, LoginService>();
             serviceCollection.AddSingleton<ITokenService, TokenService>();
+            serviceCollection.AddTransient<IUfService, UfService>();
+            serviceCollection.AddTransient<IMunicipioService, MunicipioService>();
         }
     }
 }
