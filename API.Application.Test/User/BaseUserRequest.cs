@@ -11,13 +11,13 @@ using System.Threading.Tasks;
 
 namespace API.Application.Test.User
 {
-    public abstract class BaseRequired
+    public abstract class BaseUserRequest
     {
         protected IUrlHelper url { get; set; }
         protected Guid Id { get; set; }
         protected string name = Faker.Name.FullName();
         protected string email = Faker.Internet.Email();
-        public BaseRequired()
+        public BaseUserRequest()
         {
             Mock<IUrlHelper> urlHelper = new Mock<IUrlHelper>();
             urlHelper.Setup(setup => setup.Link(It.IsAny<string>(), It.IsAny<object>())).Returns("http://localhost:5000");

@@ -54,10 +54,10 @@ namespace application.Controllers
             try 
             {
                 if (!ModelState.IsValid)
-                    BadRequest(ModelState);
+                    return BadRequest(ModelState);
                 var municipioDtoCreateResult = await service.Post(municipioCreateDto);
                 if (municipioDtoCreateResult == null)
-                    BadRequest();
+                    return BadRequest();
                 return Created(new Uri(Url.Link("GetById", new { Id = municipioDtoCreateResult.Id })), municipioDtoCreateResult);
             }
             catch (ArgumentException ex) 

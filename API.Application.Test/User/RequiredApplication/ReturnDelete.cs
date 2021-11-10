@@ -11,7 +11,7 @@ using Xunit;
 
 namespace API.Application.Test.User.RequiredApplication
 {
-    public class ReturnDelete : BaseRequired
+    public class ReturnDelete : BaseUserRequest
     {
         private UsersController usersController;
         [Fact(DisplayName ="Can Delete this.")]

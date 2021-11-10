@@ -12,7 +12,7 @@ using Xunit;
 
 namespace API.Application.Test.User.RequiredApplication
 {
-    public class RequiredGetAll : BaseRequired
+    public class RequiredGetAll : BaseUserRequest
     {
         private UsersController usersController;
 
