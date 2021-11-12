@@ -13,7 +13,7 @@ using Xunit;
 
 namespace API.Integration.Test.User
 {
-    public class WhenRequestUser : BaseIntegration
+    public class WhenRequestCRUDUser : BaseIntegration
     {
         private List<UserDtoCreate> usersDtoCreate { get; set; } = new List<UserDtoCreate>();
         private Random random = new Random();

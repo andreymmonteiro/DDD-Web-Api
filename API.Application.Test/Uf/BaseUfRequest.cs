@@ -20,12 +20,9 @@ namespace API.Application.Test.Uf
 
         protected BaseUfRequest()
         {
-            
-        }
-        protected void InicializeMock() 
-        {
             serviceMock = new Mock<IUfService>();
         }
+        
         protected void InitializeController() 
         {
             controller = new UfController(serviceMock.Object);

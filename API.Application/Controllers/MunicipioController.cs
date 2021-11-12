@@ -22,7 +22,7 @@ namespace application.Controllers
             this.service = service;
         }
 
-        [HttpDelete]
+        [HttpGet]
         public async Task<IActionResult> Get() 
         {
             if (!ModelState.IsValid)
@@ -30,8 +30,8 @@ namespace application.Controllers
             return Ok(await service.GetAll());
         }
         [HttpGet]
-        [Route("{Id}", Name ="GetById")]
-        public async Task<ActionResult> Get([FromQuery]Guid Id) 
+        [Route("{id}",Name ="GetMunicipioById")]
+        public async Task<ActionResult> Get(Guid Id) 
         {
             try 
             {
@@ -58,13 +58,48 @@ namespace application.Controllers
                 var municipioDtoCreateResult = await service.Post(municipioCreateDto);
                 if (municipioDtoCreateResult == null)
                     return BadRequest();
-                return Created(new Uri(Url.Link("GetById", new { Id = municipioDtoCreateResult.Id })), municipioDtoCreateResult);
+                return Created(new Uri(Url.Link("GetMunicipioById", new { Id = municipioDtoCreateResult.Id })), municipioDtoCreateResult);
             }
             catch (ArgumentException ex) 
             {
                 return StatusCode((int)HttpStatusCode.InternalServerError, ex.Message);
             }
             
+        }
+        [HttpPut]
+        public async Task<ActionResult> Put([FromBody] MunicipioDtoUpdate municipioDtoUpdate) 
+        {
+            try 
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+                var result = await service.Put(municipioDtoUpdate);
+                if (result == null)
+                    return BadRequest(ModelState);
+                return Ok(result);
+            }
+            catch (ArgumentException error) 
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, error.Message);
+            }
+        }
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<ActionResult> Delete(Guid id) 
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                    return BadRequest(ModelState);
+                var result = await service.Delete(id);
+                if(!result)
+                    return BadRequest(ModelState);
+                return Ok(result);
+            }
+            catch (ArgumentException error) 
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError,error.Message);
+            }
         }
     }
 }

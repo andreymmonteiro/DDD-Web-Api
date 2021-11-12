@@ -25,5 +25,11 @@ namespace Domain.Models
             get {  return numero;}
             set { numero= string.IsNullOrEmpty(value) ? "S/N" : value;}
         }
+        private Guid municipioId;
+        public Guid MunicipioId 
+        {
+            get { return municipioId;}
+            set {  municipioId=value;}
+        }
     }
 }

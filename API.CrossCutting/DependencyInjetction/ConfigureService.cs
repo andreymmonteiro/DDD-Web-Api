@@ -1,5 +1,6 @@
 ﻿using Data.Repositories;
 using Domain.Interfaces;
+using Domain.Interfaces.Services.Cep;
 using Domain.Interfaces.Services.Municipio;
 using Domain.Interfaces.Services.Token;
 using Domain.Interfaces.Services.Uf;
@@ -25,6 +26,7 @@ namespace CrossCutting.DependencyInjetction
             serviceCollection.AddSingleton<ITokenService, TokenService>();
             serviceCollection.AddTransient<IUfService, UfService>();
             serviceCollection.AddTransient<IMunicipioService, MunicipioService>();
+            serviceCollection.AddTransient<ICepService, CepService>();
         }
     }
 }

@@ -1,0 +1,53 @@
+Passo a passo DDD
+
+API.Domain
+
+	1- Entities
+	2 - Dtos
+	3 - Interfaces
+	4 - Models
+API.Data
+
+	1 - Mapping Entities 
+	2 - MyContext
+	3 - Migrations
+	4 - Update Database
+	5 - Implementations (BaseEntity)	
+		5.1 - API.Domain.Repository
+		5.2 - API.Data.Implementations
+API.Data.Test
+
+	1 - Test BaseRepository
+	2 - Test Implementations
+
+API.CrossCutting
+
+	1 - DtoToModelProfile
+	2 - EntityToDtoProfile
+	3 - ModelToEntityProfile
+
+API.Service
+	
+	1 - Create Services
+
+API.Service.Test
+	
+	1 - Test AutoMapper
+
+API.CrossCutting
+	
+	1 - Configure Repository
+	2 - Configure Service
+
+API.Application
+	
+	1 - Controller
+
+API.Application
+	
+	1 - Test Methods on Controller
+
+API.Integration.Test
+
+	1 - Test All Requests
+	

@@ -15,7 +15,6 @@ namespace API.Application.Test.Uf
         [Fact]
         public async Task CAN_GET_UF() 
         {
-            InicializeMock();
             var ufDto = new UfDto() 
             {
                 Id = id,
@@ -35,7 +34,6 @@ namespace API.Application.Test.Uf
         private async Task GetAll() 
         {
             List<UfDto> ufDtos = GetDtos();
-            InicializeMock();
             serviceMock.Setup(setup => setup.GetAll()).ReturnsAsync(ufDtos);
             InitializeController();
             var resultGetAll = await controller.Get();
