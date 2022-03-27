@@ -1,1 +1,2 @@
-# DDD-Web-Api
+# DDD-Web-Api - Just for study
+
